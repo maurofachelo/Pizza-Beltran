@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root { --ink: #202b28; --cream: #f6f4ef; --tomato: #d65a31; --gold: #e4a82e; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'DM Sans', sans-serif; }
+.bg-cream { background: var(--cream); }
+.brand-mark { display: grid; place-items: center; width: 42px; height: 42px; color: #fff; background: var(--tomato); font-weight: 700; }
+.brand-name { color: var(--ink); font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1; }
+.eyebrow, .category { color: var(--tomato); font-size: .7rem; font-weight: 700; letter-spacing: .15rem; }
+.hero-section { background: var(--cream); }
+.hero-section h1 { color: var(--ink); font-family: 'Playfair Display', serif; letter-spacing: -.08rem; }
+.hero-section h1 em { color: var(--tomato); font-style: normal; }
+.pizza-hero { font-size: clamp(7rem, 18vw, 12rem); filter: drop-shadow(8px 12px 0 var(--gold)); transform: rotate(-10deg); }
+.pizza-row { display: flex; gap: 1.25rem; }
+.pizza-thumb { display: grid; place-items: center; flex: 0 0 94px; height: 94px; background: var(--cream); font-size: 3.3rem; }
+.pizza-row h3, .order-card h2 { font-family: 'Playfair Display', serif; }
+.order-card { position: sticky; top: 1rem; color: var(--ink); background: #fffdf9; border: 1px solid #e5dfd3; box-shadow: 0 8px 24px rgba(32, 43, 40, .08); }
+.order-card h2 { color: var(--ink); }
+.order-card .border-top { border-color: #e5dfd3 !important; }
+.order-card .form-title { margin: 1.25rem 0 .5rem; color: var(--ink); font-weight: 700; }
+.order-card .form-label { margin-bottom: 0; color: #53605a; font-size: .85rem; font-weight: 700; }
+.order-card .form-control { color: var(--ink); background: #fff; border-color: #cfc8bb; }
+.order-card .form-control::placeholder { color: #8b918b; opacity: 1; }
+.order-card .form-control:focus { border-color: var(--tomato); box-shadow: 0 0 0 .2rem rgba(214, 90, 49, .15); }
+.success-screen { display: grid; place-items: center; min-height: 100vh; padding: 2rem; color: #fff; background: var(--ink); }
+.success-icon { display: grid; place-items: center; width: 70px; height: 70px; margin: 0 auto 1.5rem; border-radius: 50%; color: #fff; background: var(--tomato); font-size: 2rem; }
+@media (max-width: 991px) { .order-card { position: static; } }
+@media (max-width: 575px) { .pizza-thumb { flex-basis: 68px; height: 68px; font-size: 2.3rem; } footer { display: block !important; } footer span { display: block; margin: .35rem 0; } }

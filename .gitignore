@@ -1,0 +1,8 @@
+**/node_modules/
+**/dist/
+**/.angular/
+*.stackdump
+.env
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+frontend/.angular/
