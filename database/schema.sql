@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
   celular VARCHAR(30) NOT NULL,
   total DECIMAL(10,2) NOT NULL,
   comprobante VARCHAR(255) NULL,
-  estado ENUM('pendiente', 'confirmado', 'en preparación', 'enviado', 'cancelado') NOT NULL DEFAULT 'pendiente',
+  estado ENUM('pendiente', 'confirmado', 'en preparación', 'enviado', 'finalizado ok', 'cancelado') NOT NULL DEFAULT 'pendiente',
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -50,18 +50,18 @@ INSERT INTO usuarios (usuario, password_hash, rol)
 SELECT 'admin', '$2y$10$fY6PnG2M.iG1dGW9ru/w6erUEDWyJl0yAzmiV0maIChRxDRE1fm.e', 'admin'
 WHERE NOT EXISTS (SELECT 1 FROM usuarios WHERE usuario = 'admin');
 
-INSERT INTO pizzas (nombre, descripcion, precio, categoria, imagen)
-SELECT 'Fray Luis', 'Mozzarella, jamón, morrones asados y aceitunas.', 8500, 'Especiales', '🍕'
-WHERE NOT EXISTS (SELECT 1 FROM pizzas WHERE nombre = 'Fray Luis');
-
-INSERT INTO pizzas (nombre, descripcion, precio, categoria, imagen)
-SELECT 'La Beltrán', 'Mozzarella, pepperoni artesanal y albahaca fresca.', 7800, 'Clásicas', '🍕'
-WHERE NOT EXISTS (SELECT 1 FROM pizzas WHERE nombre = 'La Beltrán');
-
-INSERT INTO pizzas (nombre, descripcion, precio, categoria, imagen)
-SELECT 'Cuatro Quesos', 'Mozzarella, provolone, azul y parmesano.', 8200, 'Especiales', '🍕'
-WHERE NOT EXISTS (SELECT 1 FROM pizzas WHERE nombre = 'Cuatro Quesos');
-
-INSERT INTO pizzas (nombre, descripcion, precio, categoria, imagen)
-SELECT 'Vegetariana', 'Tomate, cebolla morada, champiñones y rúcula.', 7600, 'Clásicas', '🍕'
-WHERE NOT EXISTS (SELECT 1 FROM pizzas WHERE nombre = 'Vegetariana');
+INSERT INTO pizzas (id, nombre, descripcion, precio, categoria, imagen, disponible)
+VALUES
+  (1, 'Fray Luis', 'Mozzarella, jamón, morrones asados y aceitunas.', 15500, 'Especiales', '🍕', 1),
+  (2, 'Obrera', 'Mozzarella, pepperoni artesanal y albahaca fresca.', 11800, 'Clásicas', '🍕', 1),
+  (3, 'Cuatro Quesos', 'Mozzarella, provolone, azul y parmesano.', 18200, 'Especiales', '🍕', 1),
+  (4, 'Vegetariana', 'Tomate, cebolla morada, champiñones y rúcula.', 12600, 'Clásicas', '🍕', 1),
+  (5, 'La Metalurgica', 'Mozzarella, Provolone y morrones asados.', 18500, 'Especiales', '🍕', 1),
+  (6, 'La Fundicion', 'Mozzarella, tomate confitado, queso rallado.', 16300, 'Especial', '🍕', 1)
+ON DUPLICATE KEY UPDATE
+  nombre = VALUES(nombre),
+  descripcion = VALUES(descripcion),
+  precio = VALUES(precio),
+  categoria = VALUES(categoria),
+  imagen = VALUES(imagen),
+  disponible = VALUES(disponible);
