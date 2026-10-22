@@ -1,0 +1,103 @@
+<div class="menu-container">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">CATÁLOGO</span>
+      <h2>Editar menú</h2>
+    </div>
+    <button type="button" class="accent-button" (click)="nuevoPizza()">
+      + Nuevo Producto
+    </button>
+  </div>
+
+  <!-- Formulario de creación / edición -->
+  <form
+    class="pizza-form"
+    [formGroup]="pizzaForm"
+    (ngSubmit)="guardarPizza()"
+    *ngIf="editando"
+  >
+    <div class="form-header">
+      <h3>{{ pizzaSeleccionada ? "Editar pizza" : "Agregar nueva pizza" }}</h3>
+      <span class="form-hint">Completá todos los campos requeridos</span>
+    </div>
+
+    <div class="form-grid">
+      <label>
+        Nombre
+        <input formControlName="nombre" placeholder="ej. Napolitana Especial" />
+      </label>
+
+      <label>
+        Categoría
+        <input formControlName="categoria" placeholder="ej. Clásicas, Especiales" />
+      </label>
+
+      <label class="wide">
+        Descripción
+        <input formControlName="descripcion" placeholder="Ingredientes y detalles..." />
+      </label>
+
+      <label>
+        Precio ($)
+        <input type="number" formControlName="precio" min="1" />
+      </label>
+
+      <label class="form-field">
+        Ícono
+        <select formControlName="imagen">
+          <option value="🍕">🍕 Pizza</option>
+          <option value="🥤">🥤 Bebida</option>
+          <option value="🍺">🍺 Cerveza</option>
+          <option value="🥗">🥗 Ensalada</option>
+          <option value="🍰">🍰 Postre</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="accent-button"
+        [disabled]="pizzaForm.invalid"
+      >
+        Guardar cambios
+      </button>
+      <button type="button" class="light-button" (click)="cancelarEdicion()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <!-- Lista de productos del menú -->
+  <div class="menu-list">
+    <article class="menu-item" *ngFor="let pizza of pizzas">
+      <span class="menu-icon">{{ pizza.imagen || "🍕" }}</span>
+
+      <div class="menu-details">
+        <strong class="pizza-title">{{ pizza.nombre }}</strong>
+        <span class="pizza-meta">
+          {{ pizza.categoria }} · {{ pizza.precio | currency: "ARS" : "symbol" : "1.0-0" }}
+        </span>
+        <p class="pizza-desc" *ngIf="pizza.descripcion">{{ pizza.descripcion }}</p>
+      </div>
+
+      <span class="availability" [class.sold-out]="!pizza.disponible">
+        {{ pizza.disponible ? "Disponible" : "Agotada" }}
+      </span>
+
+      <div class="item-actions">
+        <button type="button" class="light-button" (click)="editarPizza(pizza)">
+          Editar
+        </button>
+        <button
+          type="button"
+          class="availability-button"
+          [class.is-sold-out]="!pizza.disponible"
+          (click)="cambiarDisponibilidad(pizza)"
+        >
+          {{ pizza.disponible ? "Marcar Agotada" : "Habilitar" }}
+        </button>
+      </div>
+    </article>
+  </div>
+</div>

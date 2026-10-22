@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Pizza, Pedido } from '../models/pizza.model';
 
-const API_URL = 'http://localhost/pizzas-fray-luis-beltran/backend/public/api.php';
+const API_URL = 'http://localhost/Pizza-Beltran/backend/public/api.php';
 
 @Injectable({ providedIn: 'root' })
 export class PizzeriaService {

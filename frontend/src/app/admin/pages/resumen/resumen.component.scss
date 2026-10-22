@@ -1,0 +1,329 @@
+:host {
+  display: block;
+}
+
+.resumen-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+// Stats Cards Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid #e8e5dc;
+  border-left: 4px solid #e4a82e;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  &.stat-pending { border-left-color: #d65a31; }
+  &.stat-sales { border-left-color: #2b7a4b; }
+  &.stat-profit { border-left-color: #1e6b5c; }
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  color: #68736c;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-icon { font-size: 18px; }
+
+.stat-value {
+  color: #202b28;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-subtitle {
+  margin-top: 4px;
+  color: #8c9791;
+  font-size: 12px;
+}
+
+// Columns
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.dashboard-section {
+  background: #fff;
+  padding: 28px;
+  border-radius: 4px;
+  border: 1px solid #e8e5dc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title-wrap {
+  margin-bottom: 20px;
+
+  .eyebrow {
+    color: #d65a31;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 4px 0 0;
+    color: #202b28;
+    font-family: Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+// Ganancias generadas
+.profit-highlight {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: #f8faf8;
+  border: 1px solid #dbe6dd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.profit-caption {
+  display: block;
+  color: #4b6655;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profit-total {
+  margin: 4px 0 0;
+  color: #1e6b5c;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.profit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.profit-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.breakdown-card {
+  padding: 14px 16px;
+  background: #faf9f6;
+  border: 1px solid #eeeae2;
+  border-radius: 4px;
+
+  .breakdown-title {
+    display: block;
+    color: #68736c;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .breakdown-value {
+    display: block;
+    margin-top: 4px;
+    color: #202b28;
+    font-size: 20px;
+    font-weight: 700;
+
+    &.text-danger { color: #b3261e; }
+  }
+
+  .breakdown-desc {
+    display: block;
+    margin-top: 2px;
+    color: #8c9791;
+    font-size: 11px;
+  }
+}
+
+// Mini ranking Pizzas más vendidas
+.empty-state {
+  text-align: center;
+  padding: 40px 16px;
+  color: #68736c;
+
+  .empty-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  p { margin: 0 0 4px; font-weight: 600; color: #202b28; }
+  small { font-size: 12px; color: #8c9791; }
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #eeeae2;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #d65a31;
+    background: #fffdfc;
+  }
+
+  &.podium-1 { border-left: 4px solid #e4a82e; background: #fdfaf3; }
+  &.podium-2 { border-left: 4px solid #a6b0aa; background: #f8faf9; }
+  &.podium-3 { border-left: 4px solid #cd7f32; background: #faf7f4; }
+}
+
+.position-badge {
+  width: 28px;
+  text-align: center;
+  font-size: 18px;
+
+  .rank-number {
+    font-size: 13px;
+    font-weight: 700;
+    color: #68736c;
+  }
+}
+
+.pizza-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1eee7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.ranking-info { flex: 1; }
+
+.ranking-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.pizza-name {
+  color: #202b28;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ranking-figures {
+  display: flex;
+  gap: 6px;
+
+  .units-count {
+    color: #d65a31;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .revenue-figure {
+    color: #68736c;
+    font-size: 12px;
+  }
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+  height: 5px;
+  background: #e8e5dc;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e4a82e, #d65a31);
+  border-radius: 3px;
+}
+
+.percentage-label {
+  font-size: 11px;
+  color: #8c9791;
+}
+
+.section-footer-action {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #f1eee7;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #d65a31;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover {
+    color: #9e3d1d;
+  }
+}
+
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .stats-grid, .profit-breakdown { grid-template-columns: 1fr; }
+  .profit-highlight { flex-direction: column; align-items: flex-start; gap: 10px; }
+}

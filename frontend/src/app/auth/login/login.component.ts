@@ -5,13 +5,13 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { PizzeriaService } from '../../services/pizzeria.service';
 
 @Component({
-  selector: 'app-admin-login',
+  selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -28,7 +28,7 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
 
-  // PHP valida la contraseña; Angular solo guarda la sesión necesaria para el guard.
+  // PHP valida la contraseña; Angular guarda la sesión para el guard y redirige al admin.
   ingresar(): void {
     const datos = this.form.getRawValue();
     this.error = false;

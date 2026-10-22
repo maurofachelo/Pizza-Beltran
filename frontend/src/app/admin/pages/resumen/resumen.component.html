@@ -1,0 +1,154 @@
+<div class="resumen-container">
+  <!-- Tarjetas de métricas principales -->
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Pedidos recibidos</span>
+        <span class="material-symbols-outlined">
+          package_2
+        </span>
+      </div>
+      <strong class="stat-value">{{ pedidosRecibidos }}</strong>
+      <span class="stat-subtitle">Historial total registrado</span>
+    </article>
+
+    <article class="stat-card stat-pending">
+      <div class="stat-header">
+        <span class="stat-label">Pendientes de confirmar</span>
+        <span class="material-symbols-outlined">
+          hourglass_bottom
+        </span>
+      </div>
+      <strong class="stat-value">{{ pendientes }}</strong>
+      <span class="stat-subtitle">Requieren atención en cocina</span>
+    </article>
+
+    <article class="stat-card stat-sales">
+      <div class="stat-header">
+        <span class="stat-label">Ventas confirmadas</span>
+        <span class="material-symbols-outlined">
+          local_pizza
+        </span>
+      </div>
+      <strong class="stat-value">{{ ventasConfirmadas | currency: "ARS" : "symbol" : "1.0-0" }}</strong>
+      <span class="stat-subtitle">{{ pedidosConfirmadosList.length }} pedidos procesados</span>
+    </article>
+
+    <article class="stat-card stat-profit">
+      <div class="stat-header">
+        <span class="stat-label">Ganancias generadas</span>
+        <span class="material-symbols-outlined">
+          attach_money
+        </span>
+      </div>
+      <strong class="stat-value">{{ gananciasTotales | currency: "ARS" : "symbol" : "1.0-0" }}</strong>
+      <span class="stat-subtitle">Efectividad del {{ tasaEfectividad }}%</span>
+    </article>
+  </section>
+
+  <!-- Contenido en dos columnas: Ganancias y Ranking -->
+  <div class="dashboard-columns">
+    <!-- SECCIÓN: Ganancias generadas -->
+    <section class="dashboard-section profit-section">
+      <div class="section-title-wrap">
+        <span class="eyebrow">FINANZAS Y RENDIMIENTO</span>
+        <h2>Ganancias generadas</h2>
+      </div>
+
+      <div class="profit-highlight">
+        <div class="profit-amount">
+          <span class="profit-caption">Ingresos totales por pedidos confirmados</span>
+          <h3 class="profit-total">{{ gananciasTotales | currency: "ARS" : "symbol" : "1.0-0" }}</h3>
+        </div>
+        <div class="profit-badge" [class.positive]="gananciasTotales > 0">
+          <span class="badge-icon">✓</span>
+          <span>Facturación activa</span>
+        </div>
+      </div>
+
+      <div class="profit-breakdown">
+        <div class="breakdown-card">
+          <span class="breakdown-title">Ticket promedio</span>
+          <strong class="breakdown-value">{{ ticketPromedio | currency: "ARS" : "symbol" : "1.0-0" }}</strong>
+          <small class="breakdown-desc">Por pedido confirmado</small>
+        </div>
+
+        <div class="breakdown-card">
+          <span class="breakdown-title">Pedidos concretados</span>
+          <strong class="breakdown-value">{{ pedidosConfirmadosList.length }}</strong>
+          <small class="breakdown-desc">De {{ pedidosRecibidos }} recibidos</small>
+        </div>
+
+        <div class="breakdown-card">
+          <span class="breakdown-title">Cancelados</span>
+          <strong class="breakdown-value text-danger">{{ pedidosCancelados }}</strong>
+          <small class="breakdown-desc">Pedidos no concretados</small>
+        </div>
+
+        <div class="breakdown-card">
+          <span class="breakdown-title">Unidades vendidas</span>
+          <strong class="breakdown-value">{{ totalUnidadesVendidas }}</strong>
+          <small class="breakdown-desc">Pizzas en total</small>
+        </div>
+      </div>
+
+      <div class="section-footer-action">
+        <a routerLink="../pedidos" class="action-btn">
+          Ver detalles de pedidos <i class="arrow">→</i>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: Pizzas más vendidas (Mini ranking) -->
+    <section class="dashboard-section ranking-section">
+      <div class="section-title-wrap">
+        <span class="eyebrow">POPULARIDAD</span>
+        <h2>Pizzas más vendidas</h2>
+      </div>
+
+      <div *ngIf="!pizzasMasVendidas.length" class="empty-state">
+        <span class="empty-icon">🍕</span>
+        <p>Aún no hay ventas registradas para armar el ranking.</p>
+        <small>Los pedidos confirmados sumarán unidades automáticamente aquí.</small>
+      </div>
+
+      <div class="ranking-list" *ngIf="pizzasMasVendidas.length">
+        <div class="ranking-item" *ngFor="let item of pizzasMasVendidas" [class.podium-1]="item.posicion === 1"
+          [class.podium-2]="item.posicion === 2" [class.podium-3]="item.posicion === 3">
+          <div class="position-badge">
+            <span *ngIf="item.posicion === 1" class="medal">🥇</span>
+            <span *ngIf="item.posicion === 2" class="medal">🥈</span>
+            <span *ngIf="item.posicion === 3" class="medal">🥉</span>
+            <span *ngIf="item.posicion > 3" class="rank-number">#{{ item.posicion }}</span>
+          </div>
+
+          <div class="pizza-avatar">
+            <span>{{ item.icono || "🍕" }}</span>
+          </div>
+
+          <div class="ranking-info">
+            <div class="ranking-top-row">
+              <strong class="pizza-name">{{ item.nombre }}</strong>
+              <div class="ranking-figures">
+                <span class="units-count"><b>{{ item.cantidad }}</b> u.</span>
+                <span class="revenue-figure">({{ item.recaudado | currency: "ARS" : "symbol" : "1.0-0" }})</span>
+              </div>
+            </div>
+
+            <!-- Barra visual de porcentaje -->
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-fill" [style.width.%]="item.porcentaje"></div>
+            </div>
+            <span class="percentage-label">{{ item.porcentaje }}% de ventas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-footer-action">
+        <a routerLink="../menu" class="action-btn">
+          Gestionar catálogo de menú <i class="arrow">→</i>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>

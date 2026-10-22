@@ -1,0 +1,141 @@
+<div class="pedidos-container">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">COCINA Y ENVÍOS</span>
+      <h2>Pedidos recientes</h2>
+    </div>
+    <div class="section-actions">
+      <button type="button" class="reset-button" (click)="reiniciarPedidos()">
+        <span class="icon">🗑️</span> Reiniciar pedidos
+      </button>
+    </div>
+  </div>
+
+  <!-- Filtros rápidos para cocina -->
+  <div class="filter-chips">
+    <button
+      type="button"
+      class="chip"
+      [class.active]="filtroEstado === 'todos'"
+      (click)="filtroEstado = 'todos'"
+    >
+      Todos ({{ pedidos.length }})
+    </button>
+    <button
+      type="button"
+      class="chip chip-pending"
+      [class.active]="filtroEstado === 'pendiente'"
+      (click)="filtroEstado = 'pendiente'"
+    >
+      Pendientes
+    </button>
+    <button
+      type="button"
+      class="chip"
+      [class.active]="filtroEstado === 'confirmado'"
+      (click)="filtroEstado = 'confirmado'"
+    >
+      Confirmados
+    </button>
+    <button
+      type="button"
+      class="chip"
+      [class.active]="filtroEstado === 'en preparación'"
+      (click)="filtroEstado = 'en preparación'"
+    >
+      En preparación
+    </button>
+    <button
+      type="button"
+      class="chip"
+      [class.active]="filtroEstado === 'enviado'"
+      (click)="filtroEstado = 'enviado'"
+    >
+      Enviados
+    </button>
+    <button
+      type="button"
+      class="chip"
+      [class.active]="filtroEstado === 'finalizado ok'"
+      (click)="filtroEstado = 'finalizado ok'"
+    >
+      Finalizados
+    </button>
+  </div>
+
+  <p class="empty" *ngIf="!pedidosFiltrados.length">
+    No hay pedidos para mostrar en esta sección.
+  </p>
+
+  <div class="orders-list" *ngIf="pedidosFiltrados.length">
+    <article class="order" *ngFor="let pedido of pedidosFiltrados">
+      <button
+        class="order-summary"
+        type="button"
+        (click)="alternarPedido(pedido)"
+      >
+        <span class="order-number">#{{ pedido.id || "nuevo" }}</span>
+        <span class="order-customer">
+          <b>{{ pedido.cliente }}</b>
+          <small>{{ pedido.direccion }} · {{ pedido.celular }}</small>
+        </span>
+        <strong class="order-total">{{ pedido.total | currency: "ARS" : "symbol" : "1.0-0" }}</strong>
+        <span
+          class="status"
+          [class.status-pending]="pedido.estado === 'pendiente'"
+          [class.status-prep]="pedido.estado === 'en preparación'"
+          [class.status-sent]="pedido.estado === 'enviado'"
+          [class.status-done]="pedido.estado === 'finalizado ok'"
+          [class.status-canceled]="pedido.estado === 'cancelado'"
+        >
+          {{ pedido.estado }}
+        </span>
+        <span class="chevron">{{ pedidoAbierto === (pedido.id ?? null) ? "−" : "+" }}</span>
+      </button>
+
+      <div class="order-detail" *ngIf="pedidoAbierto === (pedido.id ?? null)">
+        <div class="detail-columns">
+          <div class="items-column">
+            <h3>Para preparar en cocina</h3>
+            <div class="prepare-item" *ngFor="let item of pedido.items || []">
+              <strong>{{ item.cantidad }} ×</strong>
+              <span class="item-name">{{ item.nombre }}</span>
+              <b class="item-price">{{ item.precio | currency: "ARS" : "symbol" : "1.0-0" }}</b>
+            </div>
+            <p class="empty-items" *ngIf="!pedido.items?.length">
+              Este pedido no tiene productos detallados.
+            </p>
+          </div>
+
+          <div class="delivery-column">
+            <h3>Datos de entrega</h3>
+            <p><b>Cliente</b> {{ pedido.cliente }}</p>
+            <p><b>Dirección</b> {{ pedido.direccion }}</p>
+            <p><b>Celular</b> {{ pedido.celular }}</p>
+            <p>
+              <b>Comprobante</b>
+              <span>{{ pedido.comprobante || "No adjuntado" }}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="order-actions">
+          <label>
+            Cambiar estado:
+            <select
+              [value]="pedido.estado"
+              (change)="cambiarEstado(pedido, $any($event.target).value)"
+            >
+              <option value="pendiente">pendiente</option>
+              <option value="confirmado">confirmado</option>
+              <option value="en preparación">en preparación</option>
+              <option value="enviado">enviado</option>
+              <option value="finalizado ok">finalizado ok</option>
+              <option value="cancelado">cancelado</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

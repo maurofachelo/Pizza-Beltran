@@ -23,6 +23,6 @@ export interface Pedido {
   items: PedidoItem[];
   total: number;
   comprobante?: string;
-  estado: 'pendiente' | 'confirmado' | 'en preparación' | 'enviado' | 'cancelado';
+  estado: 'pendiente' | 'confirmado' | 'en preparación' | 'enviado' | 'finalizado ok' | 'cancelado';
   creadoEn?: string;
 }

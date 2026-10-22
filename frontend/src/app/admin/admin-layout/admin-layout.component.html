@@ -1,0 +1,32 @@
+<div class="admin-shell">
+  <header class="admin-topbar">
+    <div class="topbar-container">
+      <div class="brand">
+        <span class="eyebrow">PIZZAS FRAY LUIS BELTRÁN</span>
+        <h1 class="brand-title">Panel de administración</h1>
+      </div>
+
+      <nav class="nav-links" aria-label="Menú principal de administración">
+        <a routerLink="resumen" routerLinkActive="active" class="nav-tab">
+          Resumen
+        </a>
+        <a routerLink="pedidos" routerLinkActive="active" class="nav-tab">
+          Cocina y Envíos
+        </a>
+        <a routerLink="menu" routerLinkActive="active" class="nav-tab">
+          Editar Menú
+        </a>
+      </nav>
+
+      <div class="topbar-actions">
+        <button type="button" class="dark-button logout-button" (click)="logout()">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
