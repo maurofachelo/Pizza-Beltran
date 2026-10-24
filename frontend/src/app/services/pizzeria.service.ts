@@ -58,12 +58,36 @@ export class PizzeriaService {
     return this.http.delete<void>(`${API_URL}?recurso=pedidos&accion=reiniciar`);
   }
 
-  crearPizza(pizza: Omit<Pizza, 'id'>): Observable<Pizza> {
-    return this.http.post<Pizza>(`${API_URL}?recurso=pizzas`, pizza);
+  crearPizza(pizza: Omit<Pizza, 'id'> | FormData): Observable<Pizza> {
+    return this.http
+      .post<Pizza>(`${API_URL}?recurso=pizzas`, pizza)
+      .pipe(map(p => this.normalizarPizza(p)));
   }
 
-  actualizarPizza(id: number, pizza: Partial<Pizza>): Observable<Pizza> {
-    return this.http.patch<Pizza>(`${API_URL}?recurso=pizzas&id=${id}`, pizza);
+  actualizarPizza(id: number, pizza: Partial<Pizza> | FormData): Observable<Pizza> {
+    if (pizza instanceof FormData) {
+      return this.http
+        .post<Pizza>(`${API_URL}?recurso=pizzas&id=${id}`, pizza)
+        .pipe(map(p => this.normalizarPizza(p)));
+    }
+    return this.http
+      .patch<Pizza>(`${API_URL}?recurso=pizzas&id=${id}`, pizza)
+      .pipe(map(p => this.normalizarPizza(p)));
+  }
+
+  eliminarPizza(id: number): Observable<{ ok: boolean }> {
+    return this.http.delete<{ ok: boolean }>(`${API_URL}?recurso=pizzas&id=${id}`);
+  }
+
+  obtenerUrlImagen(imagen?: string | null): string {
+    if (!imagen || imagen.trim() === '' || imagen === '🍕' || imagen.length < 4) {
+      return 'pizza portada.png';
+    }
+    if (imagen.startsWith('http://') || imagen.startsWith('https://') || imagen.startsWith('data:') || imagen.startsWith('/')) {
+      return imagen;
+    }
+    const cleanPath = imagen.replace(/^\/+/, '');
+    return `http://localhost/Pizza-Beltran/backend/public/${cleanPath}`;
   }
 
   private normalizarPizza(pizza: Pizza): Pizza {

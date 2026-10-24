@@ -5,7 +5,7 @@
       <h2>Editar menú</h2>
     </div>
     <button type="button" class="accent-button" (click)="nuevoPizza()">
-      + Nuevo Producto
+      <i class="bi bi-plus-lg me-1"></i> + Nuevo Producto
     </button>
   </div>
 
@@ -17,66 +17,196 @@
     *ngIf="editando"
   >
     <div class="form-header">
-      <h3>{{ pizzaSeleccionada ? "Editar pizza" : "Agregar nueva pizza" }}</h3>
-      <span class="form-hint">Completá todos los campos requeridos</span>
+      <div>
+        <h3>{{ pizzaSeleccionada ? "Editar producto: " + pizzaSeleccionada.nombre : "Agregar nuevo producto al menú" }}</h3>
+        <span class="form-hint">Completá los datos y subí la imagen para el catálogo</span>
+      </div>
+      <button type="button" class="btn-close-form" (click)="cancelarEdicion()" title="Cerrar formulario">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
     <div class="form-grid">
       <label>
-        Nombre
-        <input formControlName="nombre" placeholder="ej. Napolitana Especial" />
+        Nombre del producto *
+        <input formControlName="nombre" placeholder="ej. Pizza Napolitana Especial" required />
       </label>
 
       <label>
-        Categoría
-        <input formControlName="categoria" placeholder="ej. Clásicas, Especiales" />
+        Categoría *
+        <input formControlName="categoria" placeholder="ej. Clásicas, Especiales, Bebidas..." required />
       </label>
 
       <label class="wide">
-        Descripción
-        <input formControlName="descripcion" placeholder="Ingredientes y detalles..." />
+        Descripción / Ingredientes *
+        <input formControlName="descripcion" placeholder="Detalle de ingredientes y preparación..." required />
       </label>
 
       <label>
-        Precio ($)
-        <input type="number" formControlName="precio" min="1" />
+        Precio ($) *
+        <input type="number" formControlName="precio" min="1" step="50" required />
       </label>
 
-      <label class="form-field">
-        Ícono
-        <select formControlName="imagen">
-          <option value="🍕">🍕 Pizza</option>
-          <option value="🥤">🥤 Bebida</option>
-          <option value="🍺">🍺 Cerveza</option>
-          <option value="🥗">🥗 Ensalada</option>
-          <option value="🍰">🍰 Postre</option>
-        </select>
-      </label>
+      <!-- CAMPO DE CARGA DE IMAGEN -->
+      <div class="file-upload-block wide">
+        <span class="file-label">Imagen del producto</span>
+        <div class="upload-dropzone">
+          <div class="preview-area" *ngIf="previewImagen">
+            <img
+              [src]="previewImagen"
+              alt="Vista previa"
+              class="img-preview"
+              (error)="onImgError($event)"
+            />
+            <button
+              type="button"
+              class="btn-quitar-img"
+              (click)="quitarArchivoSeleccionado()"
+              *ngIf="archivoSeleccionado"
+              title="Quitar imagen seleccionada"
+            >
+              <i class="bi bi-trash3-fill"></i>
+            </button>
+          </div>
+
+          <div class="upload-controls">
+            <label class="btn-select-file" for="producto-imagen-input">
+              <i class="bi bi-cloud-arrow-up-fill me-2"></i>
+              {{ previewImagen ? 'Cambiar imagen' : 'Seleccionar imagen' }}
+            </label>
+            <input
+              id="producto-imagen-input"
+              type="file"
+              accept="image/png, image/jpeg, image/webp, image/gif"
+              (change)="onArchivoSeleccionado($event)"
+              class="file-input-hidden"
+            />
+            <span class="file-name-text" *ngIf="nombreArchivo">
+              <i class="bi bi-check-circle-fill text-success me-1"></i>{{ nombreArchivo }}
+            </span>
+            <span class="file-help-text" *ngIf="!nombreArchivo">
+              Archivos permitidos: JPG, PNG, WEBP. Se guardará en <code>backend/public/upload-producto</code>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="form-actions">
       <button
         type="submit"
         class="accent-button"
-        [disabled]="pizzaForm.invalid"
+        [disabled]="pizzaForm.invalid || guardando"
       >
-        Guardar cambios
+        <i class="bi bi-check2-circle me-1" *ngIf="!guardando"></i>
+        <span *ngIf="guardando" class="spinner-border spinner-border-sm me-1" role="status"></span>
+        {{ guardando ? 'Guardando...' : (pizzaSeleccionada ? 'Actualizar cambios' : 'Crear producto') }}
       </button>
-      <button type="button" class="light-button" (click)="cancelarEdicion()">
+      <button type="button" class="light-button" (click)="cancelarEdicion()" [disabled]="guardando">
         Cancelar
       </button>
     </div>
   </form>
 
+  <!-- BARRA DE FILTROS Y BÚSQUEDA DEL CATÁLOGO ADMIN -->
+  <section class="admin-filters-bar mb-4">
+    <div class="filters-row">
+      <!-- Búsqueda textual -->
+      <div class="filter-group search-group">
+        <label for="admin-search-input" class="filter-title">
+          <i class="bi bi-search me-1 text-tomato"></i>Buscar en el catálogo
+        </label>
+        <div class="search-box">
+          <i class="bi bi-search icon"></i>
+          <input
+            id="admin-search-input"
+            type="text"
+            [(ngModel)]="filtroTexto"
+            placeholder="Filtrar por nombre, ingrediente o categoría..."
+            class="filter-text-input"
+          />
+          <button
+            *ngIf="filtroTexto"
+            type="button"
+            class="btn-clear"
+            (click)="filtroTexto = ''"
+            title="Limpiar búsqueda"
+          >
+            <i class="bi bi-x-circle-fill"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtro por Categoría -->
+      <div class="filter-group">
+        <label for="admin-cat-select" class="filter-title">
+          <i class="bi bi-funnel me-1 text-tomato"></i>Categoría
+        </label>
+        <select id="admin-cat-select" [(ngModel)]="filtroCategoria" class="filter-select">
+          <option value="todas">Todas las categorías</option>
+          <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <!-- Filtro por Disponibilidad -->
+      <div class="filter-group">
+        <label for="admin-disp-select" class="filter-title">
+          <i class="bi bi-toggle-on me-1 text-tomato"></i>Disponibilidad
+        </label>
+        <select id="admin-disp-select" [(ngModel)]="filtroDisponibilidad" class="filter-select">
+          <option value="todas">Todos los estados</option>
+          <option value="disponibles">Solo Disponibles</option>
+          <option value="agotadas">Solo Agotadas</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Indicador de resultados activos -->
+    <div class="filters-meta" *ngIf="hayFiltrosActivos">
+      <div class="tags-list">
+        <span class="results-count">
+          Mostrando <strong>{{ pizzasFiltradas.length }}</strong> de {{ pizzas.length }} productos
+        </span>
+        <span class="active-chip" *ngIf="filtroTexto">
+          Texto: "<em>{{ filtroTexto }}</em>"
+          <i class="bi bi-x ms-1" (click)="filtroTexto = ''"></i>
+        </span>
+        <span class="active-chip" *ngIf="filtroCategoria !== 'todas'">
+          Cat: <strong>{{ filtroCategoria }}</strong>
+          <i class="bi bi-x ms-1" (click)="filtroCategoria = 'todas'"></i>
+        </span>
+        <span class="active-chip" *ngIf="filtroDisponibilidad !== 'todas'">
+          Estado: <strong>{{ filtroDisponibilidad === 'disponibles' ? 'Disponibles' : 'Agotadas' }}</strong>
+          <i class="bi bi-x ms-1" (click)="filtroDisponibilidad = 'todas'"></i>
+        </span>
+      </div>
+      <button type="button" class="btn-reset-filters" (click)="limpiarFiltros()">
+        <i class="bi bi-arrow-counterclockwise me-1"></i>Reestablecer filtros
+      </button>
+    </div>
+  </section>
+
   <!-- Lista de productos del menú -->
-  <div class="menu-list">
-    <article class="menu-item" *ngFor="let pizza of pizzas">
-      <span class="menu-icon">{{ pizza.imagen || "🍕" }}</span>
+  <div class="menu-list" *ngIf="!cargando && pizzasFiltradas.length > 0">
+    <article class="menu-item" *ngFor="let pizza of pizzasFiltradas">
+      <!-- Miniatura de imagen del producto -->
+      <div class="menu-thumb">
+        <img
+          [src]="obtenerImagenUrl(pizza.imagen)"
+          [alt]="pizza.nombre"
+          class="thumb-img"
+          (error)="onImgError($event)"
+          loading="lazy"
+        />
+      </div>
 
       <div class="menu-details">
-        <strong class="pizza-title">{{ pizza.nombre }}</strong>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <strong class="pizza-title">{{ pizza.nombre }}</strong>
+          <span class="badge-category">{{ pizza.categoria }}</span>
+        </div>
         <span class="pizza-meta">
-          {{ pizza.categoria }} · {{ pizza.precio | currency: "ARS" : "symbol" : "1.0-0" }}
+          {{ pizza.precio | currency: "ARS" : "symbol" : "1.0-0" }}
         </span>
         <p class="pizza-desc" *ngIf="pizza.descripcion">{{ pizza.descripcion }}</p>
       </div>
@@ -86,18 +216,74 @@
       </span>
 
       <div class="item-actions">
-        <button type="button" class="light-button" (click)="editarPizza(pizza)">
-          Editar
+        <!-- Botón Editar -->
+        <button
+          type="button"
+          class="light-button"
+          (click)="editarPizza(pizza)"
+          title="Modificar precio, detalles o imagen"
+        >
+          <i class="bi bi-pencil-square me-1"></i> Editar
         </button>
+
+        <!-- Botón Disponibilidad -->
         <button
           type="button"
           class="availability-button"
           [class.is-sold-out]="!pizza.disponible"
           (click)="cambiarDisponibilidad(pizza)"
+          [title]="pizza.disponible ? 'Marcar como agotado temporalmente' : 'Reactivar disponibilidad'"
         >
+          <i [class]="pizza.disponible ? 'bi bi-slash-circle me-1' : 'bi bi-check-circle me-1'"></i>
           {{ pizza.disponible ? "Marcar Agotada" : "Habilitar" }}
+        </button>
+
+        <!-- Botón Eliminar -->
+        <button
+          type="button"
+          class="delete-button"
+          (click)="eliminarPizza(pizza)"
+          title="Eliminar producto permanentemente"
+        >
+          <i class="bi bi-trash3-fill me-1"></i> Eliminar
         </button>
       </div>
     </article>
+  </div>
+
+  <!-- Estado de carga -->
+  <div class="loading-state text-center py-5" *ngIf="cargando">
+    <div class="spinner-border text-tomato" role="status">
+      <span class="visually-hidden">Cargando menú...</span>
+    </div>
+    <p class="mt-2 text-secondary">Cargando catálogo de productos...</p>
+  </div>
+
+  <!-- Estado sin resultados con filtros -->
+  <div class="empty-state text-center py-5" *ngIf="!cargando && pizzasFiltradas.length === 0">
+    <div class="empty-icon mb-2">🔍🍕</div>
+    <h4>No se encontraron productos</h4>
+    <p class="text-secondary small mb-3" *ngIf="hayFiltrosActivos">
+      Ningún producto coincide con los filtros aplicados.
+    </p>
+    <p class="text-secondary small mb-3" *ngIf="!hayFiltrosActivos">
+      Todavía no has agregado ningún producto al catálogo.
+    </p>
+    <button
+      *ngIf="hayFiltrosActivos"
+      type="button"
+      class="light-button"
+      (click)="limpiarFiltros()"
+    >
+      <i class="bi bi-arrow-counterclockwise me-1"></i> Ver todos los productos
+    </button>
+    <button
+      *ngIf="!hayFiltrosActivos"
+      type="button"
+      class="accent-button"
+      (click)="nuevoPizza()"
+    >
+      <i class="bi bi-plus-lg me-1"></i> + Agregar primer producto
+    </button>
   </div>
 </div>

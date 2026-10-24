@@ -1,3 +1,372 @@
 :host {
   display: block;
 }
+
+// Variables locales armónicas con styles.scss
+$tomato: #d65a31;
+$gold: #e4a82e;
+$ink: #202b28;
+$ink-dark: #161d1b;
+$cream: #f6f4ef;
+$cream-card: #fffdf9;
+$border-soft: #e5dfd3;
+$text-secondary: #53605a;
+$text-muted-cream: #a6b2ad;
+
+/* -------------------------------------------------------------
+   1. BARRA DE FILTROS Y BÚSQUEDA
+   ------------------------------------------------------------- */
+.filters-panel {
+  background: $cream-card;
+  border: 1px solid $border-soft;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(32, 43, 40, 0.04);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 10px 28px rgba(32, 43, 40, 0.07);
+    border-color: #d8cfbe;
+  }
+}
+
+.filter-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  color: #4b5852;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    color: #8c9792;
+    pointer-events: none;
+    font-size: 0.95rem;
+  }
+
+  .filter-input {
+    padding-left: 2.6rem;
+    padding-right: 2.4rem;
+    height: 46px;
+    background-color: #ffffff;
+    border: 1px solid #cfc8bb;
+    border-radius: 10px;
+    color: $ink;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #939c97;
+      font-size: 0.88rem;
+    }
+
+    &:focus {
+      background-color: #ffffff;
+      border-color: $tomato;
+      box-shadow: 0 0 0 0.2rem rgba(214, 90, 49, 0.16);
+    }
+  }
+
+  .btn-clear-search {
+    position: absolute;
+    right: 0.8rem;
+    background: transparent;
+    border: none;
+    color: #8c9792;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $tomato;
+    }
+  }
+}
+
+.filter-select {
+  height: 46px;
+  background-color: #ffffff;
+  border: 1px solid #cfc8bb;
+  border-radius: 10px;
+  color: $ink;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: $tomato;
+    box-shadow: 0 0 0 0.2rem rgba(214, 90, 49, 0.16);
+  }
+}
+
+.filters-active-bar {
+  border-top-color: #ece5d8 !important;
+
+  .filter-count-badge {
+    background: rgba(214, 90, 49, 0.1);
+    color: $tomato;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(214, 90, 49, 0.15);
+  }
+
+  .active-tag {
+    background: #ede8dc;
+    color: $ink;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+
+    .action-remove {
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      color: #717d77;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: $tomato;
+      }
+    }
+  }
+
+  .reset-filters-link {
+    color: $tomato;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.85;
+    }
+  }
+}
+
+/* -------------------------------------------------------------
+   PRODUCTOS Y DETALLES DE CARTA
+   ------------------------------------------------------------- */
+.pizza-price {
+  font-size: 1.15rem;
+  color: $ink;
+  font-weight: 700;
+}
+
+.empty-results-box {
+  background: $cream-card;
+  border: 2px dashed #ded7c9;
+  border-radius: 16px;
+  padding: 3rem 1.5rem;
+
+  .empty-icon {
+    font-size: 3.5rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+  }
+}
+
+/* -------------------------------------------------------------
+   2. PIE DE PÁGINA (FOOTER) PROFESIONAL
+   ------------------------------------------------------------- */
+.site-footer {
+  background-color: $ink;
+  background-image: radial-gradient(circle at 10% 20%, rgba(32, 43, 40, 1) 0%, rgba(22, 29, 27, 1) 90%);
+  color: $cream;
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid $tomato;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(228, 168, 46, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    letter-spacing: -0.02rem;
+  }
+
+  .footer-desc {
+    color: $text-muted-cream;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01rem;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 28px;
+      height: 2px;
+      background: $tomato;
+      border-radius: 2px;
+    }
+  }
+
+  .footer-label-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    color: #d1ded7;
+  }
+
+  .payment-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e9ece7;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    backdrop-filter: blur(4px);
+
+    &.alias-highlight {
+      background: rgba(228, 168, 46, 0.12);
+      border-color: rgba(228, 168, 46, 0.3);
+      color: #fff;
+    }
+  }
+
+  .text-muted-cream {
+    color: $text-muted-cream;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .footer-info-list {
+    li {
+      strong {
+        font-size: 0.95rem;
+      }
+    }
+  }
+
+  .btn-whatsapp {
+    background-color: #25d366;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+    transition: all 0.25s ease;
+
+    &:hover {
+      background-color: #20ba5a;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+  }
+
+  .btn-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(220, 39, 67, 0.25);
+    transition: all 0.25s ease;
+
+    &:hover {
+      opacity: 0.92;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 39, 67, 0.4);
+    }
+  }
+
+  .footer-store-info {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .footer-bottom {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .footer-quote {
+    font-style: italic;
+    font-weight: 500;
+  }
+}
+
+/* -------------------------------------------------------------
+   RESPONSIVE ADAPTATIONS
+   ------------------------------------------------------------- */
+@media (max-width: 991px) {
+  .filters-panel {
+    padding: 1.25rem;
+  }
+
+  .site-footer {
+    text-align: left;
+  }
+}
+
+@media (max-width: 575px) {
+  .filters-panel {
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .filter-label {
+    font-size: 0.75rem;
+  }
+
+  .search-input-wrapper .filter-input,
+  .filter-select {
+    height: 42px;
+    font-size: 0.88rem;
+  }
+
+  .site-footer {
+    padding-top: 1rem;
+
+    .footer-title {
+      font-size: 1.18rem;
+      margin-top: 0.5rem;
+    }
+  }
+}

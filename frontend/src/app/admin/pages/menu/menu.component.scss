@@ -2,12 +2,19 @@
   display: block;
 }
 
+$tomato: #d65a31;
+$tomato-dark: #bd4922;
+$ink: #202b28;
+$cream: #f6f4ef;
+$border: #e8e5dc;
+$muted: #68736c;
+
 .menu-container {
   background: #ffffff;
   padding: 32px;
-  border-radius: 4px;
-  border: 1px solid #e8e5dc;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  border: 1px solid $border;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
 .section-heading {
@@ -19,7 +26,7 @@
 }
 
 .eyebrow {
-  color: #d65a31;
+  color: $tomato;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -28,10 +35,14 @@
 
 h2 {
   margin: 6px 0 0;
-  color: #202b28;
+  color: $ink;
   font-family: Georgia, serif;
   font-size: 28px;
   font-weight: 700;
+}
+
+.text-tomato {
+  color: $tomato !important;
 }
 
 .accent-button {
@@ -40,13 +51,15 @@ h2 {
   font-weight: 700;
   font-size: 13px;
   color: #ffffff;
-  background: #d65a31;
-  border-radius: 3px;
+  background: $tomato;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: #bd4922;
+    background: $tomato-dark;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(214, 90, 49, 0.25);
   }
 
   &:disabled {
@@ -56,83 +69,283 @@ h2 {
 }
 
 .light-button {
-  border: 0;
+  border: 1px solid #d9d5cb;
   padding: 8px 14px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 13px;
-  color: #202b28;
+  color: $ink;
   background: #f1eee7;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #e4dfd5;
+    border-color: #cac4b8;
   }
 }
 
 .availability-button {
   min-width: 140px;
-  border: 0;
+  border: 1px solid #d9d5cb;
   padding: 8px 14px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 12px;
-  color: #202b28;
+  color: $ink;
   background: #e8e3d9;
-  border-radius: 3px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
 
   &:hover {
     background: #dcd6ca;
   }
 
   &.is-sold-out {
-    background: #d4ebd8;
-    color: #1e6b37;
+    background: #e8f5e9;
+    border-color: #c8e6c9;
+    color: #2e7d32;
 
     &:hover {
-      background: #c3e2c8;
+      background: #c8e6c9;
     }
   }
 }
 
-// Pizza Form
+.delete-button {
+  border: 1px solid #fed7d7;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #c53030;
+  background: #fff5f5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #fed7d7;
+    color: #9b2c2c;
+    border-color: #feb2b2;
+  }
+}
+
+/* =========================================================
+   BARRA DE FILTROS Y BÚSQUEDA
+   ========================================================= */
+.admin-filters-bar {
+  background: #fbfaf7;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+
+  .filters-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    align-items: flex-end;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filter-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: $muted;
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      position: absolute;
+      left: 12px;
+      color: #98a29c;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .filter-text-input {
+      width: 100%;
+      height: 40px;
+      padding-left: 34px;
+      padding-right: 32px;
+      background: #ffffff;
+      border: 1px solid #d9d7ce;
+      border-radius: 6px;
+      font-size: 13px;
+      color: $ink;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $tomato;
+        box-shadow: 0 0 0 2px rgba(214, 90, 49, 0.15);
+      }
+    }
+
+    .btn-clear {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      color: #98a29c;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0;
+
+      &:hover {
+        color: $tomato;
+      }
+    }
+  }
+
+  .filter-select {
+    height: 40px;
+    padding: 0 12px;
+    background: #ffffff;
+    border: 1px solid #d9d7ce;
+    border-radius: 6px;
+    font-size: 13px;
+    color: $ink;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $tomato;
+      box-shadow: 0 0 0 2px rgba(214, 90, 49, 0.15);
+    }
+  }
+
+  .filters-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #eeeae2;
+
+    .tags-list {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .results-count {
+      font-size: 12px;
+      color: $muted;
+    }
+
+    .active-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      background: #ede9df;
+      color: $ink;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+
+      i {
+        cursor: pointer;
+        font-size: 13px;
+        color: $tomato;
+
+        &:hover {
+          color: $tomato-dark;
+        }
+      }
+    }
+
+    .btn-reset-filters {
+      background: none;
+      border: none;
+      color: $tomato;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(214, 90, 49, 0.08);
+      }
+    }
+  }
+}
+
+/* =========================================================
+   FORMULARIO DE EDICIÓN / CREACIÓN
+   ========================================================= */
 .pizza-form {
   margin-bottom: 32px;
-  padding: 24px;
-  background: #fbfaf7;
-  border: 1px solid #e8e5dc;
-  border-radius: 4px;
+  padding: 26px;
+  background: #fdfcf9;
+  border: 1px solid $border;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
 }
 
 .form-header {
-  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
 
   h3 {
     margin: 0;
-    color: #202b28;
+    color: $ink;
     font-family: Georgia, serif;
     font-size: 20px;
+    font-weight: 700;
   }
 
   .form-hint {
     display: block;
     margin-top: 4px;
     font-size: 12px;
-    color: #68736c;
+    color: $muted;
+  }
+
+  .btn-close-form {
+    background: none;
+    border: none;
+    color: #98a29c;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+
+    &:hover {
+      color: $ink;
+      background: #eeeae2;
+    }
   }
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 18px;
 
   label {
     font-size: 13px;
     font-weight: 700;
-    color: #202b28;
+    color: $ink;
   }
 
   .wide {
@@ -147,33 +360,142 @@ h2 {
     margin-top: 6px;
     padding: 10px 12px;
     border: 1px solid #d9d7ce;
-    border-radius: 2px;
+    border-radius: 6px;
     background: #ffffff;
     font-size: 14px;
-    color: #202b28;
+    color: $ink;
+    transition: border-color 0.2s ease;
 
     &:focus {
       outline: none;
-      border-color: #d65a31;
+      border-color: $tomato;
+      box-shadow: 0 0 0 2px rgba(214, 90, 49, 0.15);
     }
   }
 }
 
-.form-field {
-  display: flex;
-  flex-direction: column;
+/* CARGA DE ARCHIVO DE IMAGEN */
+.file-upload-block {
+  .file-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: $ink;
+    margin-bottom: 6px;
+  }
+
+  .upload-dropzone {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+    background: #ffffff;
+    border: 2px dashed #d9d7ce;
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: $tomato;
+    }
+  }
+
+  .preview-area {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #d9d7ce;
+    background: #f6f4ef;
+    flex-shrink: 0;
+
+    .img-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-quitar-img {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(197, 48, 48, 0.88);
+      color: #fff;
+      border: none;
+      font-size: 11px;
+      cursor: pointer;
+
+      &:hover {
+        background: #9b2c2c;
+      }
+    }
+  }
+
+  .upload-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .btn-select-file {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: #ede9df;
+    color: $ink;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    width: fit-content;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: #dfd9cd;
+    }
+  }
+
+  .file-input-hidden {
+    display: none;
+  }
+
+  .file-name-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: $ink;
+  }
+
+  .file-help-text {
+    font-size: 11px;
+    color: $muted;
+
+    code {
+      background: #f1eee7;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 10.5px;
+    }
+  }
 }
 
 .form-actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 22px;
   padding-top: 16px;
   border-top: 1px solid #eeeae2;
 }
 
-// Menu List
+/* =========================================================
+   LISTA DE PRODUCTOS
+   ========================================================= */
 .menu-list {
   display: flex;
   flex-direction: column;
@@ -185,55 +507,77 @@ h2 {
   gap: 16px;
   padding: 18px 8px;
   border-top: 1px solid #e8e6df;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #faf9f6;
+  }
 
   &:last-child {
     border-bottom: 1px solid #e8e6df;
   }
 }
 
-.menu-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+.menu-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
   background: #f6f4ef;
+  border: 1px solid #dcd7cb;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  flex-shrink: 0;
+
+  .thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .menu-details {
   flex: 1;
 
   .pizza-title {
-    display: block;
-    color: #202b28;
+    color: $ink;
     font-size: 16px;
+    font-weight: 700;
+  }
+
+  .badge-category {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    background: #f1eee7;
+    color: $tomato;
+    border-radius: 12px;
   }
 
   .pizza-meta {
     display: block;
     margin-top: 3px;
-    color: #68736c;
-    font-size: 13px;
-    font-weight: 600;
+    color: $ink;
+    font-size: 14px;
+    font-weight: 700;
   }
 
   .pizza-desc {
     margin: 4px 0 0;
-    color: #8c9791;
-    font-size: 12px;
+    color: #7b8680;
+    font-size: 12.5px;
   }
 }
 
 .availability {
   display: inline-block;
-  min-width: 100px;
+  min-width: 95px;
   padding: 6px 10px;
-  border-radius: 3px;
+  border-radius: 20px;
   background: #e8f5e9;
   color: #2e7d32;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   text-align: center;
 
@@ -247,11 +591,33 @@ h2 {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.empty-state {
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  h4 {
+    color: $ink;
+    font-family: Georgia, serif;
+    margin-bottom: 6px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+@media (max-width: 991px) {
+  .admin-filters-bar .filters-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
   .menu-container {
-    padding: 20px 16px;
+    padding: 20px 14px;
   }
 
   .form-grid {
@@ -264,13 +630,21 @@ h2 {
 
   .menu-item {
     flex-wrap: wrap;
+    gap: 12px;
   }
 
   .menu-details {
-    min-width: calc(100% - 65px);
+    min-width: calc(100% - 80px);
   }
 
   .availability {
-    margin-left: 60px;
+    margin-left: 0;
+  }
+
+  .item-actions {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 8px;
+    border-top: 1px dashed #e8e6df;
   }
 }
