@@ -123,7 +123,13 @@
           </div>
 
           <div class="pizza-avatar">
-            <span>{{ item.icono || "🍕" }}</span>
+            <img
+              [src]="obtenerImagenUrl(item.icono)"
+              [alt]="item.nombre"
+              class="avatar-img"
+              (error)="onImgError($event)"
+              loading="lazy"
+            />
           </div>
 
           <div class="ranking-info">

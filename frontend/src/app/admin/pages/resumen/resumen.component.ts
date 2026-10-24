@@ -27,6 +27,17 @@ export class ResumenComponent implements OnInit {
   pizzas: Pizza[] = [];
   cargando = true;
 
+  obtenerImagenUrl(imagen?: string | null): string {
+    return this.service.obtenerUrlImagen(imagen);
+  }
+
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (img && !img.src.includes('pizza portada.png')) {
+      img.src = 'pizza portada.png';
+    }
+  }
+
   ngOnInit(): void {
     this.cargarDatos();
   }

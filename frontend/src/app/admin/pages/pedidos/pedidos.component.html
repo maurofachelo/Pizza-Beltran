@@ -114,7 +114,17 @@
             <p><b>Celular</b> {{ pedido.celular }}</p>
             <p>
               <b>Comprobante</b>
-              <span>{{ pedido.comprobante || "No adjuntado" }}</span>
+              <span *ngIf="!pedido.comprobante">No adjuntado</span>
+              <a
+                *ngIf="pedido.comprobante"
+                [href]="'http://localhost/Pizza-Beltran/backend/public/' + pedido.comprobante"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="badge bg-primary text-decoration-none ms-1"
+                title="Abrir comprobante de transferencia"
+              >
+                <i class="bi bi-box-arrow-up-right me-1"></i>Ver comprobante
+              </a>
             </p>
           </div>
         </div>

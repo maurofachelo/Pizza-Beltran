@@ -25,7 +25,14 @@
           </a>
         </div>
         <div class="col-lg-5 text-center">
-          <div class="pizza-hero">🍕</div>
+          <div class="pizza-hero-wrapper">
+            <img
+              src="pizza portada.png"
+              alt="Pizza Artesanal Fray Luis Beltrán"
+              class="pizza-hero-img img-fluid"
+              loading="eager"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -33,30 +40,141 @@
 
   <section id="menu" class="py-5 bg-white">
     <div class="container py-lg-4">
-      <div class="mb-5">
+      <div class="mb-4">
         <span class="eyebrow">EL MENÚ</span>
         <h2 class="display-6 fw-bold mt-2">Elegí tu próxima favorita</h2>
         <p class="text-secondary">
-          Hechas al momento. Disponibles todos los días de 19 a 23:30.
+          Hechas al momento con masa madre e ingredientes de primera calidad. Disponibles todos los días de 19 a 23:30 h.
         </p>
       </div>
+
+      <!-- BARRA DE FILTROS Y BÚSQUEDA -->
+      <div class="filters-panel mb-5">
+        <div class="row g-3 align-items-end">
+          <!-- Campo de Búsqueda -->
+          <div class="col-12 col-lg-5">
+            <label class="filter-label" for="search-input">
+              <i class="bi bi-search me-1 text-tomato"></i>Buscar producto o ingrediente
+            </label>
+            <div class="search-input-wrapper">
+              <i class="bi bi-search search-icon"></i>
+              <input
+                id="search-input"
+                type="text"
+                class="form-control filter-input"
+                [(ngModel)]="busqueda"
+                placeholder="Ej. jamón, rúcula, cuatro quesos, morrones..."
+                aria-label="Buscar producto o ingrediente"
+              />
+              <button
+                *ngIf="busqueda"
+                type="button"
+                class="btn-clear-search"
+                (click)="busqueda = ''"
+                title="Limpiar búsqueda"
+              >
+                <i class="bi bi-x-circle-fill"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Selector de Categoría -->
+          <div class="col-6 col-lg-3">
+            <label class="filter-label" for="select-categoria">
+              <i class="bi bi-funnel me-1 text-tomato"></i>Categoría
+            </label>
+            <select
+              id="select-categoria"
+              class="form-select filter-select"
+              [(ngModel)]="categoriaSeleccionada"
+              aria-label="Filtrar por categoría"
+            >
+              <option *ngFor="let cat of categorias" [value]="cat.id">
+                {{ cat.icon }} {{ cat.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Selector de Orden / Prioridad -->
+          <div class="col-6 col-lg-4">
+            <label class="filter-label" for="select-orden">
+              <i class="bi bi-arrow-down-up me-1 text-tomato"></i>Ordenar por
+            </label>
+            <select
+              id="select-orden"
+              class="form-select filter-select"
+              [(ngModel)]="ordenSeleccionado"
+              aria-label="Ordenar listado de productos"
+            >
+              <option *ngFor="let opt of opcionesOrden" [value]="opt.id">
+                {{ opt.icon }} {{ opt.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Indicador de estado y filtros activos -->
+        <div
+          class="filters-active-bar d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 pt-3 border-top"
+          *ngIf="hayFiltrosActivos"
+        >
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="badge filter-count-badge">
+              <i class="bi bi-check2-circle me-1"></i>
+              {{ pizzasFiltradas.length }} {{ pizzasFiltradas.length === 1 ? 'resultado encontrado' : 'resultados encontrados' }}
+            </span>
+            <span class="active-tag" *ngIf="busqueda">
+              Texto: "<strong>{{ busqueda }}</strong>"
+              <i class="bi bi-x ms-1 action-remove" (click)="busqueda = ''"></i>
+            </span>
+            <span class="active-tag" *ngIf="categoriaSeleccionada !== 'todas'">
+              Cat: <strong>{{ categoriaSeleccionada }}</strong>
+              <i class="bi bi-x ms-1 action-remove" (click)="categoriaSeleccionada = 'todas'"></i>
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-link btn-sm reset-filters-link"
+            (click)="limpiarFiltros()"
+          >
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Reestablecer filtros
+          </button>
+        </div>
+      </div>
+
       <div class="row g-5">
         <div class="col-lg-7">
+          <!-- Listado de Productos Filtrados -->
           <article
             class="pizza-row border-top py-4"
-            *ngFor="let pizza of pizzas"
+            *ngFor="let pizza of pizzasFiltradas"
           >
-            <div class="pizza-thumb">{{ pizza.imagen }}</div>
+            <div class="pizza-thumb">
+              <img
+                [src]="obtenerImagenUrl(pizza.imagen)"
+                [alt]="pizza.nombre"
+                class="pizza-card-img"
+                (error)="onImgError($event)"
+                loading="lazy"
+              />
+            </div>
             <div class="flex-grow-1">
-              <span class="category">{{ pizza.categoria }}</span>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="category">{{ pizza.categoria }}</span>
+                <span *ngIf="!pizza.disponible" class="badge bg-secondary-subtle text-secondary small">
+                  No disponible
+                </span>
+              </div>
               <h3 class="h4 mt-1">{{ pizza.nombre }}</h3>
               <p class="text-secondary mb-3">{{ pizza.descripcion }}</p>
               <div class="d-flex justify-content-between align-items-center">
-                <strong>{{
+                <strong class="pizza-price">{{
                   pizza.precio | currency: "ARS" : "symbol" : "1.0-0"
                 }}</strong>
                 <button
                   class="btn btn-outline-danger btn-sm"
+                  [disabled]="!pizza.disponible"
                   (click)="agregar(pizza)"
                 >
                   <i class="bi bi-plus-lg me-1"></i>Agregar
@@ -64,7 +182,26 @@
               </div>
             </div>
           </article>
+
+          <!-- Estado vacío cuando no hay resultados -->
+          <div
+            class="empty-results-box text-center py-5 my-3"
+            *ngIf="pizzasFiltradas.length === 0"
+          >
+            <div class="empty-icon mb-2">🔍🍕</div>
+            <h3 class="h5 fw-bold text-dark mb-2">No encontramos ningún producto</h3>
+            <p class="text-secondary small mb-3">
+              No hay productos que coincidan con los filtros seleccionados o el término "<strong class="text-dark">{{ busqueda }}</strong>".
+            </p>
+            <button
+              class="btn btn-outline-dark btn-sm px-3"
+              (click)="limpiarFiltros()"
+            >
+              <i class="bi bi-arrow-counterclockwise me-1"></i>Ver todos los productos
+            </button>
+          </div>
         </div>
+
         <div class="col-lg-5">
           <aside class="order-card p-4">
             <span class="eyebrow">TU PEDIDO</span>
@@ -164,11 +301,115 @@
     </div>
   </section>
 
-  <footer
-    class="container d-flex justify-content-between py-4 text-secondary small"
-  >
-    <span>© 2026 Pizzas Fray Luis Beltrán</span>
-    <span>Hecho con masa, corazon y barrio.</span>
+  <!-- PIE DE PÁGINA (FOOTER) PROFESIONAL -->
+  <footer class="site-footer">
+    <div class="container py-5">
+      <div class="row g-4 g-lg-5">
+        <!-- Columna 1: Marca, Filosofía y Métodos de Pago -->
+        <div class="col-lg-4 col-md-6">
+          <div class="footer-brand mb-3 d-flex align-items-center gap-2">
+            <span class="brand-mark">FLB</span>
+            <span class="brand-name text-white">Pizzas<br />Fray Luis Beltrán</span>
+          </div>
+          <p class="footer-desc mb-4">
+            Pizzas artesanales con masa madre de fermentación lenta (48 horas), horneadas a la piedra con ingredientes frescos de productores locales. Sabor tradicional con calidad gourmet.
+          </p>
+          <div class="payment-box">
+            <span class="footer-label-title mb-2 d-block">
+              <i class="bi bi-wallet2 text-tomato me-1"></i> Métodos de pago aceptados
+            </span>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="payment-chip">
+                <i class="bi bi-cash-stack text-gold me-1"></i> Efectivo (en entrega)
+              </span>
+              <span class="payment-chip">
+                <i class="bi bi-bank text-gold me-1"></i> Transferencia
+              </span>
+              <span class="payment-chip alias-highlight">
+                <i class="bi bi-qr-code text-gold me-1"></i> Alias: <strong>FRAY.PIZZA</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna 2: Horarios, Modalidades y Zonas -->
+        <div class="col-lg-4 col-md-6">
+          <h3 class="footer-title">Horarios & Modalidad</h3>
+          <ul class="footer-info-list list-unstyled mb-0">
+            <li class="d-flex align-items-start gap-3 mb-3">
+              <i class="bi bi-clock-history text-tomato fs-5 flex-shrink-0 mt-1"></i>
+              <div>
+                <strong class="d-block text-white">Horarios de atención</strong>
+                <span class="d-block text-muted-cream">Todos los días de 19:00 a 23:30 h</span>
+                <small class="text-gold">Viernes, Sábados y Feriados hasta las 00:00 h</small>
+              </div>
+            </li>
+            <li class="d-flex align-items-start gap-3 mb-3">
+              <i class="bi bi-bicycle text-tomato fs-5 flex-shrink-0 mt-1"></i>
+              <div>
+                <strong class="d-block text-white">Modalidad de pedido</strong>
+                <span class="d-block text-muted-cream">🛵 Envíos a domicilio (Delivery propio)</span>
+                <span class="d-block text-muted-cream">🛍️ Retiro en local (Take Away)</span>
+              </div>
+            </li>
+            <li class="d-flex align-items-start gap-3">
+              <i class="bi bi-geo-alt-fill text-tomato fs-5 flex-shrink-0 mt-1"></i>
+              <div>
+                <strong class="d-block text-white">Zonas de entrega</strong>
+                <span class="d-block text-muted-cream">Fray Luis Beltrán, Capitán Bermúdez y San Lorenzo</span>
+                <small class="text-muted-cream opacity-75">Consultar por envíos a zonas aledañas</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna 3: Contacto Directo y Redes Sociales -->
+        <div class="col-lg-4 col-md-12">
+          <h3 class="footer-title">Contacto & Redes</h3>
+          <p class="text-muted-cream mb-3">
+            ¿Tenés alguna consulta o querés realizar un pedido especial para eventos? Contactanos de forma directa:
+          </p>
+          <div class="d-flex flex-column gap-2 mb-4">
+            <!-- Botón WhatsApp -->
+            <a
+              href="https://wa.me/5493410000000?text=Hola%20Pizzas%20Fray%20Luis%20Beltr%C3%A1n!%20Quisiera%20hacer%20un%20pedido"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-whatsapp d-flex align-items-center justify-content-center gap-2"
+            >
+              <i class="bi bi-whatsapp fs-5"></i>
+              <span>Pedir por WhatsApp</span>
+            </a>
+            <!-- Botón Instagram -->
+            <a
+              href="https://instagram.com/fray.pizza"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-instagram d-flex align-items-center justify-content-center gap-2"
+            >
+              <i class="bi bi-instagram fs-5"></i>
+              <span>Seguinos &#64;fray.pizza</span>
+            </a>
+          </div>
+          <div class="footer-store-info pt-2 border-top border-secondary-subtle small text-muted-cream">
+            <div class="mb-1">
+              <i class="bi bi-pin-map text-tomato me-2"></i>Av. San Martín 1234, Fray Luis Beltrán, Santa Fe
+            </div>
+            <div>
+              <i class="bi bi-telephone text-tomato me-2"></i>+54 9 341 000-0000
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Línea Inferior de Copyright -->
+      <div class="footer-bottom border-top pt-4 mt-5 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-muted-cream small">
+        <span>© 2026 Pizzas Fray Luis Beltrán. Todos los derechos reservados.</span>
+        <span class="footer-quote text-gold">
+          Hecho con masa madre, corazón y barrio. 🍕
+        </span>
+      </div>
+    </div>
   </footer>
 </main>
 
