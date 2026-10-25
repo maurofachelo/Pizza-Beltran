@@ -88,7 +88,7 @@
         <div class="breakdown-card">
           <span class="breakdown-title">Unidades vendidas</span>
           <strong class="breakdown-value">{{ totalUnidadesVendidas }}</strong>
-          <small class="breakdown-desc">Pizzas en total</small>
+          <small class="breakdown-desc">Productos en total</small>
         </div>
       </div>
 
@@ -99,26 +99,34 @@
       </div>
     </section>
 
-    <!-- SECCIÓN: Pizzas más vendidas (Mini ranking) -->
+    <!-- SECCIÓN: Productos más vendidos (Mini ranking - Top 3) -->
     <section class="dashboard-section ranking-section">
       <div class="section-title-wrap">
         <span class="eyebrow">POPULARIDAD</span>
-        <h2>Pizzas más vendidas</h2>
+        <h2>Productos más vendidos</h2>
       </div>
 
-      <div *ngIf="!pizzasMasVendidas.length" class="empty-state">
-        <span class="empty-icon">🍕</span>
+      <div *ngIf="!productosMasVendidos.length" class="empty-state">
+        <span class="empty-icon">
+          <span class="material-symbols-outlined" style="font-size: 2.5rem; color: #a0aec0;">trending_up</span>
+        </span>
         <p>Aún no hay ventas registradas para armar el ranking.</p>
         <small>Los pedidos confirmados sumarán unidades automáticamente aquí.</small>
       </div>
 
-      <div class="ranking-list" *ngIf="pizzasMasVendidas.length">
-        <div class="ranking-item" *ngFor="let item of pizzasMasVendidas" [class.podium-1]="item.posicion === 1"
+      <div class="ranking-list" *ngIf="productosMasVendidos.length">
+        <div class="ranking-item" *ngFor="let item of productosMasVendidos.slice(0, 3)" [class.podium-1]="item.posicion === 1"
           [class.podium-2]="item.posicion === 2" [class.podium-3]="item.posicion === 3">
           <div class="position-badge">
-            <span *ngIf="item.posicion === 1" class="medal">🥇</span>
-            <span *ngIf="item.posicion === 2" class="medal">🥈</span>
-            <span *ngIf="item.posicion === 3" class="medal">🥉</span>
+            <span *ngIf="item.posicion === 1" class="rank-medal gold" title="1° Puesto">
+              <i class="bi bi-trophy-fill text-warning"></i>
+            </span>
+            <span *ngIf="item.posicion === 2" class="rank-medal silver" title="2° Puesto">
+              <i class="bi bi-award-fill text-secondary"></i>
+            </span>
+            <span *ngIf="item.posicion === 3" class="rank-medal bronze" title="3° Puesto">
+              <i class="bi bi-award-fill" style="color: #cd7f32;"></i>
+            </span>
             <span *ngIf="item.posicion > 3" class="rank-number">#{{ item.posicion }}</span>
           </div>
 

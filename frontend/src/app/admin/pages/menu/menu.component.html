@@ -261,7 +261,9 @@
 
   <!-- Estado sin resultados con filtros -->
   <div class="empty-state text-center py-5" *ngIf="!cargando && pizzasFiltradas.length === 0">
-    <div class="empty-icon mb-2">🔍🍕</div>
+    <div class="empty-icon mb-2">
+      <span class="material-symbols-outlined" style="font-size: 2.75rem; color: #a0aec0;">search_off</span>
+    </div>
     <h4>No se encontraron productos</h4>
     <p class="text-secondary small mb-3" *ngIf="hayFiltrosActivos">
       Ningún producto coincide con los filtros aplicados.

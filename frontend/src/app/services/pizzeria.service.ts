@@ -10,10 +10,10 @@ export class PizzeriaService {
   private readonly http = inject(HttpClient);
   // Conservamos un catálogo inicial para que la pantalla no quede vacía mientras responde PHP.
   private readonly pizzasSubject = new BehaviorSubject<Pizza[]>([
-    { id: 1, nombre: 'Fray Luis', descripcion: 'Mozzarella, jamón, morrones asados y aceitunas.', precio: 8500, categoria: 'Especiales', imagen: '🍕', disponible: true },
-    { id: 2, nombre: 'La Beltrán', descripcion: 'Mozzarella, pepperoni artesanal y albahaca fresca.', precio: 7800, categoria: 'Clásicas', imagen: '🍕', disponible: true },
-    { id: 3, nombre: 'Cuatro Quesos', descripcion: 'Mozzarella, provolone, azul y parmesano.', precio: 8200, categoria: 'Especiales', imagen: '🍕', disponible: true },
-    { id: 4, nombre: 'Vegetariana', descripcion: 'Tomate, cebolla morada, champiñones y rúcula.', precio: 7600, categoria: 'Clásicas', imagen: '🍕', disponible: true }
+    { id: 1, nombre: 'Fray Luis', descripcion: 'Mozzarella, jamón, morrones asados y aceitunas.', precio: 8500, categoria: 'Especiales', imagen: 'pizza portada.png', disponible: true },
+    { id: 2, nombre: 'La Beltrán', descripcion: 'Mozzarella, pepperoni artesanal y albahaca fresca.', precio: 7800, categoria: 'Clásicas', imagen: 'pizza portada.png', disponible: true },
+    { id: 3, nombre: 'Cuatro Quesos', descripcion: 'Mozzarella, provolone, azul y parmesano.', precio: 8200, categoria: 'Especiales', imagen: 'pizza portada.png', disponible: true },
+    { id: 4, nombre: 'Vegetariana', descripcion: 'Tomate, cebolla morada, champiñones y rúcula.', precio: 7600, categoria: 'Clásicas', imagen: 'pizza portada.png', disponible: true }
   ]);
   pizzas$ = this.pizzasSubject.asObservable();
 

@@ -102,7 +102,7 @@ export class ResumenComponent implements OnInit {
     return Math.round((this.pedidosConfirmadosList.length / this.pedidos.length) * 100);
   }
 
-  // Sección de Pizzas más vendidas (mini ranking)
+  // Sección de Productos más vendidos (mini ranking - top 3)
   get pizzasMasVendidas(): PizzaRankingItem[] {
     const mapa = new Map<string, { cantidad: number; recaudado: number; icono?: string }>();
 
@@ -117,7 +117,7 @@ export class ResumenComponent implements OnInit {
 
         if (!existente.icono) {
           const pizzaMatch = this.pizzas.find(p => p.nombre.toLowerCase() === item.nombre.toLowerCase());
-          existente.icono = pizzaMatch?.imagen || '🍕';
+          existente.icono = pizzaMatch?.imagen || 'pizza portada.png';
         }
 
         mapa.set(item.nombre, existente);
@@ -128,7 +128,7 @@ export class ResumenComponent implements OnInit {
       nombre,
       cantidad: datos.cantidad,
       recaudado: datos.recaudado,
-      icono: datos.icono || '🍕',
+      icono: datos.icono || 'pizza portada.png',
       porcentaje: 0,
       posicion: 0
     }));
@@ -143,6 +143,10 @@ export class ResumenComponent implements OnInit {
       posicion: index + 1,
       porcentaje: totalUnidades > 0 ? Math.round((item.cantidad / totalUnidades) * 100) : 0
     }));
+  }
+
+  get productosMasVendidos(): PizzaRankingItem[] {
+    return this.pizzasMasVendidas.slice(0, 3);
   }
 
   get totalUnidadesVendidas(): number {

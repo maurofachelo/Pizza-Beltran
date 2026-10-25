@@ -27,20 +27,21 @@ export class HomeComponent implements OnInit {
   categoriaSeleccionada = 'todas';
   ordenSeleccionado = 'populares';
 
-  readonly categorias = [
-    { id: 'todas', label: 'Todas las categorías', icon: '✨' },
-    { id: 'pizzas', label: 'Pizzas', icon: '🍕' },
-    { id: 'bebidas', label: 'Bebidas', icon: '🥤' },
-    { id: 'cervezas', label: 'Cervezas', icon: '🍺' },
-    { id: 'ensaladas', label: 'Ensaladas', icon: '🥗' },
-    { id: 'postres', label: 'Postres', icon: '🍰' }
-  ];
+  get categorias(): string[] {
+    const set = new Set<string>();
+    this.pizzas.forEach(p => {
+      if (p.categoria && p.categoria.trim()) {
+        set.add(p.categoria.trim());
+      }
+    });
+    return Array.from(set);
+  }
 
   readonly opcionesOrden = [
-    { id: 'populares', label: 'Más vendidos / Populares', icon: '🔥' },
-    { id: 'precio-asc', label: 'Precio: Menor a Mayor', icon: '💵' },
-    { id: 'precio-desc', label: 'Precio: Mayor a Menor', icon: '💎' },
-    { id: 'ofertas', label: 'Ofertas y Combos', icon: '🏷️' }
+    { id: 'populares', label: 'Más vendidos / Populares' },
+    { id: 'precio-asc', label: 'Precio: Menor a Mayor' },
+    { id: 'precio-desc', label: 'Precio: Mayor a Menor' },
+    { id: 'ofertas', label: 'Ofertas y Combos' }
   ];
 
   pedidoForm = this.fb.nonNullable.group({
@@ -102,34 +103,8 @@ export class HomeComponent implements OnInit {
 
       // 2. Filtro por categoría seleccionada
       if (this.categoriaSeleccionada !== 'todas') {
-        const catNorm = this.normalizarTexto(pizza.categoria || '');
-        const nombreNorm = this.normalizarTexto(pizza.nombre || '');
-
-        if (this.categoriaSeleccionada === 'pizzas') {
-          const esOtra = ['bebida', 'cerveza', 'birra', 'ensalada', 'postre', 'dulce', 'helado'].some(c =>
-            catNorm.includes(c)
-          );
-          if (esOtra) return false;
-        } else if (this.categoriaSeleccionada === 'bebidas') {
-          if (!catNorm.includes('bebida') && !catNorm.includes('gaseosa') && !catNorm.includes('agua') && !nombreNorm.includes('coca') && !nombreNorm.includes('sprite')) {
-            return false;
-          }
-        } else if (this.categoriaSeleccionada === 'cervezas') {
-          if (!catNorm.includes('cerveza') && !catNorm.includes('birra') && !catNorm.includes('artesanal') && !nombreNorm.includes('ipa') && !nombreNorm.includes('stout')) {
-            return false;
-          }
-        } else if (this.categoriaSeleccionada === 'ensaladas') {
-          if (!catNorm.includes('ensalada') && !nombreNorm.includes('ensalada') && !catNorm.includes('caesar')) {
-            return false;
-          }
-        } else if (this.categoriaSeleccionada === 'postres') {
-          if (!catNorm.includes('postre') && !catNorm.includes('dulce') && !catNorm.includes('tiramisu') && !catNorm.includes('helado')) {
-            return false;
-          }
-        } else {
-          if (!catNorm.includes(this.normalizarTexto(this.categoriaSeleccionada))) {
-            return false;
-          }
+        if (this.normalizarTexto(pizza.categoria) !== this.normalizarTexto(this.categoriaSeleccionada)) {
+          return false;
         }
       }
 

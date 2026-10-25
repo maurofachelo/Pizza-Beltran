@@ -4,4 +4,6 @@
 *.stackdump
 .env
 frontend/.angular/
+generate_docs.js
+Documentacion_Tecnica_Pizzas_Fray_Luis_Beltran.docx
 
