@@ -1,25 +1,38 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin.guard';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './auth/login/login.component';
-import { AdminLayoutComponent } from './admin/admin-layout/admin-layout.component';
-import { ResumenComponent } from './admin/pages/resumen/resumen.component';
-import { PedidosComponent } from './admin/pages/pedidos/pedidos.component';
-import { MenuComponent } from './admin/pages/menu/menu.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'inicio', redirectTo: '', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { 
+    path: '', 
+    loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) 
+  },
+  { 
+    path: 'inicio', 
+    redirectTo: '', 
+    pathMatch: 'full' 
+  },
+  { 
+    path: 'login', 
+    loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) 
+  },
   {
     path: 'admin',
-    component: AdminLayoutComponent,
+    loadComponent: () => import('./admin/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
     canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'resumen', pathMatch: 'full' },
-      { path: 'resumen', component: ResumenComponent },
-      { path: 'pedidos', component: PedidosComponent },
-      { path: 'menu', component: MenuComponent }
+      { 
+        path: 'resumen', 
+        loadComponent: () => import('./admin/pages/resumen/resumen.component').then(m => m.ResumenComponent) 
+      },
+      { 
+        path: 'pedidos', 
+        loadComponent: () => import('./admin/pages/pedidos/pedidos.component').then(m => m.PedidosComponent) 
+      },
+      { 
+        path: 'menu', 
+        loadComponent: () => import('./admin/pages/menu/menu.component').then(m => m.MenuComponent) 
+      }
     ]
   },
   { path: '**', redirectTo: '' }
